@@ -1,0 +1,44 @@
+WATER JUG PROBLEM
+
+from collections import deque
+def water_jug_bfs(cap_a, cap_b, target):
+    visited = set()
+    queue = deque([((0, 0), [])])
+    while queue:
+        (a, b), path = queue.popleft()
+        if a == target or b == target:
+            return path + [(a, b)]
+        if (a, b) in visited:
+            continue
+        visited.add((a, b))
+        actions = [
+            ((cap_a, b), "Fill A"), ((a, cap_b), "Fill B"),
+            ((0, b), "Empty A"), ((a, 0), "Empty B"),
+            ((a - min(a, cap_b - b), b + min(a, cap_b - b)), "Pour A→B"),
+            ((a + min(b, cap_a - a), b - min(b, cap_a - a)), "Pour B→A")
+        ]
+        for state, action in actions:
+            queue.append((state, path + [(a, b), action]))
+    return "No solution"
+if _name_ == "_main_":
+    cap_a, cap_b, target = 4, 3, 2
+    result = water_jug_bfs(cap_a, cap_b, target)
+    if isinstance(result, str):
+        print(result)
+    else:
+        for step in result:
+            print(step)
+
+#Example Usage
+input:
+Included in the program
+output:
+(0, 0)
+Fill B
+(0, 3)
+Pour B -> A
+(3, 0)
+Fill B
+(3, 3)
+Pour B -> A
+(4, 2)
