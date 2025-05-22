@@ -1,0 +1,29 @@
+
+
+from collections import deque
+
+def valid(m, c): return 0 <= m <= 3 and 0 <= c <= 3 and (m == 0 or m >= c)
+
+def bfs():
+    start, goal = (3, 3, 1), (0, 0, 0)
+    q = deque([(start, [])])
+    seen = set()
+
+    while q:
+        (m, c, b), path = q.popleft()
+        if (m, c, b) in seen: continue
+        seen.add((m, c, b))
+        path = path + [(m, c, b)]
+        if (m, c, b) == goal: return path
+
+        moves = [(1,0), (2,0), (0,1), (0,2), (1,1)]
+        for dm, dc in moves:
+            if b:
+                nm, nc, nb = m - dm, c - dc, 0
+            else:
+                nm, nc, nb = m + dm, c + dc, 1
+            if valid(nm, nc) and valid(3 - nm, 3 - nc):
+                q.append(((nm, nc, nb), path))
+    return None
+
+for step in bfs(): print(step)
